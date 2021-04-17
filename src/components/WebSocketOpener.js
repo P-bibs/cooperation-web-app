@@ -8,6 +8,7 @@ export default class WebSocketOpener extends React.Component {
     this.state = {
       ws: null,
       websocketOpen: false,
+      instrument: "",
     };
   }
 
@@ -28,7 +29,13 @@ export default class WebSocketOpener extends React.Component {
       });
     };
 
-    ws.onmessage = (event) => {};
+    ws.onmessage = (event) => {
+      console.log(event);
+      let deserialized = JSON.parse(event.data);
+      if (deserialized.type === "instrument") {
+        this.setState({ instrument: deserialized.data });
+      }
+    };
 
     ws.onclose = (event) => {
       console.log("SOCKET CLOSED");
@@ -60,7 +67,9 @@ export default class WebSocketOpener extends React.Component {
         </div>
       );
     } else {
-      return <ControlView ws={this.state.ws} />;
+      return (
+        <ControlView ws={this.state.ws} instrument={this.state.instrument} />
+      );
     }
   }
 }

@@ -4,7 +4,6 @@ export default class ControlView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      instrument: this.instrument,
       pattern: [false, false, false, false, false, false, false, false],
     };
   }
@@ -26,7 +25,10 @@ export default class ControlView extends React.Component {
     return (
       <>
         <div className="w-full h-full flex flex-col items-center justify-center">
-          <h1>You are currently controlling: {this.instrument}</h1>
+          <h1 className="text-lg m-3">
+            You are currently controlling:{" "}
+            <span className="font-bold">{this.props.instrument}</span>
+          </h1>
           <div
             id="matrix-control"
             className="h-10 w-auto p-2 flex flex-row items-center justify-center bg-gray-700 box-content space-x-2"
