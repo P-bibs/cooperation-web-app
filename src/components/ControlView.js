@@ -3,17 +3,24 @@ import React from "react";
 export default class ControlView extends React.Component {
   constructor(props) {
     super(props);
+    this.ws = props.ws;
     this.state = {
       instrument: this.instrument,
-      pattern: [false, true, false, false, true, true, false, false],
+      pattern: [false, false, false, false, false, false, false, false],
     };
   }
 
   updatePattern(indexToSwap) {
-    this.setState((prevState, props) => ({
-      instrument: prevState.instrument,
-      pattern: prevState.pattern.map((a, j) => (indexToSwap === j ? !a : a)),
-    }));
+    this.setState(
+      (prevState, props) => ({
+        pattern: prevState.pattern.map((a, j) => (indexToSwap === j ? !a : a)),
+      }),
+      () => {
+        this.ws.send(
+          JSON.stringify({ type: "patternUpdate", data: this.state.pattern })
+        );
+      }
+    );
   }
 
   render() {

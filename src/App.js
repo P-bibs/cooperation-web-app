@@ -1,7 +1,7 @@
-import ControlView from "./components/ControlView";
+import WebSocketOpener from "./components/WebSocketOpener";
 
 function App() {
-  return <ControlView />;
+  return <WebSocketOpener />;
 }
 
 export default App;
