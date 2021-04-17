@@ -1,4 +1,3 @@
-import "./App.css";
 import ControlView from "./components/ControlView";
 
 function App() {
