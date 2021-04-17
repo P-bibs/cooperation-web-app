@@ -12,7 +12,7 @@ export default class WebSocketOpener extends React.Component {
   }
 
   attemptConnection() {
-    let port = "7474";
+    let port = "";
     let address = `wss://cooperation.ngrok.io:${port}`;
     console.log("attempting connection at " + address);
     let ws = new WebSocket(address);
@@ -43,6 +43,10 @@ export default class WebSocketOpener extends React.Component {
       console.log(event);
       console.groupEnd();
     };
+
+    window.onbeforeunload = () => {
+      ws.close();
+    };
   }
 
   render() {
@@ -56,7 +60,7 @@ export default class WebSocketOpener extends React.Component {
         </div>
       );
     } else {
-      return <ControlView ws={this.state.websocket} />;
+      return <ControlView ws={this.state.ws} />;
     }
   }
 }
