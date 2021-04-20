@@ -7,8 +7,12 @@ export default class WebSocketOpener extends React.Component {
     super(props);
     this.state = {
       ws: null,
-      websocketOpen: false,
+      readyToGo: false,
       instrument: "",
+      instrumentIndex: null,
+      barRestart: false,
+      warn: false,
+      pattern: [],
     };
   }
 
@@ -24,23 +28,35 @@ export default class WebSocketOpener extends React.Component {
 
     ws.onopen = (event) => {
       console.log("Socket opened");
-      this.setState({
-        websocketOpen: true,
-      });
     };
 
     ws.onmessage = (event) => {
-      console.log(event);
       let deserialized = JSON.parse(event.data);
       if (deserialized.type === "instrument") {
-        this.setState({ instrument: deserialized.data });
+        this.setState({
+          instrumentIndex: deserialized.data[0],
+          instrument: deserialized.data[1],
+        });
+      } else if (deserialized.type === "patternUpdate") {
+        this.setState({ pattern: deserialized.data, readyToGo: true });
+      } else if (deserialized.type === "barRestart") {
+        this.setState({ barRestart: true }, () => {
+          setTimeout(() => {
+            this.setState({ barRestart: false });
+          }, 200);
+        });
+      } else if (deserialized.type === "warn") {
+        this.setState({ warn: deserialized.data });
+      } else {
+        console.log("UNRESOLVED MESSAGE");
+        console.log(deserialized);
       }
     };
 
     ws.onclose = (event) => {
       console.log("SOCKET CLOSED");
       this.setState({
-        websocketOpen: false,
+        readyToGo: false,
       });
     };
 
@@ -57,7 +73,7 @@ export default class WebSocketOpener extends React.Component {
   }
 
   render() {
-    if (!this.state.websocketOpen) {
+    if (!this.state.readyToGo) {
       return (
         <div className="w-full h-full flex flex-col items-center justify-center">
           <h1>Would you like to connect?</h1>
@@ -68,7 +84,14 @@ export default class WebSocketOpener extends React.Component {
       );
     } else {
       return (
-        <ControlView ws={this.state.ws} instrument={this.state.instrument} />
+        <ControlView
+          ws={this.state.ws}
+          instrumentIndex={this.state.instrumentIndex}
+          instrument={this.state.instrument}
+          pattern={this.state.pattern}
+          barRestart={this.state.barRestart}
+          warn={this.state.warn}
+        />
       );
     }
   }
