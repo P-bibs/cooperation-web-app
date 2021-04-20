@@ -28,7 +28,7 @@ const ControlView = (props) => {
         "Melody (note 5)",
         "Melody (note 6)",
       ]
-    : ["Kick Drum", "Snare", "Closed Hi-Hat", "Cymbal", "Rimshot", "Clap"];
+    : ["Kick Drum", "Snare", "Closed Hi-Hat", "Cymbal", "Clap", "Rimshot"];
 
   return (
     <>
