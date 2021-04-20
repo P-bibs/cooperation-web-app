@@ -12,6 +12,7 @@ export default class WebSocketOpener extends React.Component {
       instrumentIndex: null,
       barRestart: false,
       warn: false,
+      closed: false,
       pattern: [],
     };
   }
@@ -57,6 +58,7 @@ export default class WebSocketOpener extends React.Component {
       console.log("SOCKET CLOSED");
       this.setState({
         readyToGo: false,
+        closed: true,
       });
     };
 
@@ -73,7 +75,13 @@ export default class WebSocketOpener extends React.Component {
   }
 
   render() {
-    if (!this.state.readyToGo) {
+    if (this.state.closed) {
+      return (
+        <div className="w-full h-full flex flex-col items-center justify-center">
+          <h1>No empty connections are available at this time</h1>
+        </div>
+      );
+    } else if (!this.state.readyToGo) {
       return (
         <div className="w-full h-full flex flex-col items-center justify-center">
           <h1>Would you like to connect?</h1>
