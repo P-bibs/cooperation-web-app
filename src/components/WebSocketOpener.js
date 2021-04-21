@@ -1,6 +1,7 @@
 import ControlView from "./ControlView";
 import React from "react";
 import { Button } from "@material-ui/core";
+import Instructions from "./Instructions";
 
 export default class WebSocketOpener extends React.Component {
   constructor(props) {
@@ -83,12 +84,23 @@ export default class WebSocketOpener extends React.Component {
       );
     } else if (!this.state.readyToGo) {
       return (
-        <div className="w-full h-full flex flex-col items-center justify-center">
-          <h1>Would you like to connect?</h1>
-          <Button variant="contained" onClick={() => this.attemptConnection()}>
-            Connect
-          </Button>
-        </div>
+        <>
+          <div className="w-full h-full flex flex-col items-center justify-center">
+            <div className="p-5 text-center bg-gray-100 rounded shadow">
+              <h1 className="text-2xl mb-3">Would you like to connect?</h1>
+              <Button
+                variant="contained"
+                onClick={() => this.attemptConnection()}
+              >
+                Connect
+              </Button>
+            </div>
+            <div className="w-1/2 mt-5">
+              <h1 className="text-2xl font-bold">Instructions</h1>
+              <Instructions />
+            </div>
+          </div>
+        </>
       );
     } else {
       return (
