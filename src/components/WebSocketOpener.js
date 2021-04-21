@@ -79,7 +79,10 @@ export default class WebSocketOpener extends React.Component {
     if (this.state.closed) {
       return (
         <div className="w-full h-full flex flex-col items-center justify-center">
-          <h1>No empty connections are available at this time</h1>
+          <h1>
+            No connections available at this time (this either means the
+            performance just ended or the performance is full)
+          </h1>
         </div>
       );
     } else if (!this.state.readyToGo) {
